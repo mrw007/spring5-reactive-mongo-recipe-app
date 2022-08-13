@@ -16,11 +16,6 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-/**
- * Created by Berkson Ximenes
- * Date: 26/07/2021
- * Time: 07:57
- */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles("reactive")

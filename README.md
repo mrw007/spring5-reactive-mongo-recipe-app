@@ -3,7 +3,7 @@
 ![Bootstrap](https://img.shields.io/badge/bootstrap-%23563D7C.svg?style=for-the-badge&logo=bootstrap&logoColor=white)
 ![MongoDb](https://img.shields.io/badge/MongoDb-%23005C0F.svg?style=for-the-badge&logo=Thymeleaf&logoColor=white)
 
-# spring5-mongo-recipe-app
+# spring5-reactive-mongo-recipe-app
 
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/mrw007/spring5-mongo-recipe-app/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/mrw007/spring5-mongo-recipe-app/tree/master)
 [![codecov](https://codecov.io/gh/mrw007/spring5-mongo-recipe-app/branch/master/graph/badge.svg?token=EF9DZ19POX)](https://codecov.io/gh/mrw007/spring5-mongo-recipe-app)

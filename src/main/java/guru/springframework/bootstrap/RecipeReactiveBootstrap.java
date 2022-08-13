@@ -1,9 +1,6 @@
 package guru.springframework.bootstrap;
 
 import guru.springframework.domain.*;
-import guru.springframework.repositories.CategoryRepository;
-import guru.springframework.repositories.RecipeRepository;
-import guru.springframework.repositories.UnitOfMeasureRepository;
 import guru.springframework.repositories.reactive.CategoryReactiveRepository;
 import guru.springframework.repositories.reactive.RecipeReactiveRepository;
 import guru.springframework.repositories.reactive.UnitOfMeasureReactiveRepository;
@@ -20,9 +17,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/**
- * Created by jt on 6/13/17.
- */
 @Slf4j
 @Component
 @Profile("reactive")
@@ -119,39 +113,39 @@ public class RecipeReactiveBootstrap implements ApplicationListener<ContextRefre
         //get UOMs
         Optional<UnitOfMeasure> eachUomOptional = unitOfMeasureRepository.findByDescription("Each").blockOptional();
 
-        if (!eachUomOptional.isPresent()) {
+        if (eachUomOptional.isEmpty()) {
             throw new RuntimeException("Expected UOM Not Found");
         }
 
         Optional<UnitOfMeasure> tableSpoonUomOptional = unitOfMeasureRepository
                 .findByDescription("Tablespoon").blockOptional();
 
-        if (!tableSpoonUomOptional.isPresent()) {
+        if (tableSpoonUomOptional.isEmpty()) {
             throw new RuntimeException("Expected UOM Not Found");
         }
 
         Optional<UnitOfMeasure> teaSpoonUomOptional = unitOfMeasureRepository.findByDescription("Teaspoon")
                 .blockOptional();
 
-        if (!teaSpoonUomOptional.isPresent()) {
+        if (teaSpoonUomOptional.isEmpty()) {
             throw new RuntimeException("Expected UOM Not Found");
         }
 
         Optional<UnitOfMeasure> dashUomOptional = unitOfMeasureRepository.findByDescription("Dash").blockOptional();
 
-        if (!dashUomOptional.isPresent()) {
+        if (dashUomOptional.isEmpty()) {
             throw new RuntimeException("Expected UOM Not Found");
         }
 
         Optional<UnitOfMeasure> pintUomOptional = unitOfMeasureRepository.findByDescription("Pint").blockOptional();
 
-        if (!pintUomOptional.isPresent()) {
+        if (pintUomOptional.isEmpty()) {
             throw new RuntimeException("Expected UOM Not Found");
         }
 
         Optional<UnitOfMeasure> cupsUomOptional = unitOfMeasureRepository.findByDescription("Cup").blockOptional();
 
-        if (!cupsUomOptional.isPresent()) {
+        if (cupsUomOptional.isEmpty()) {
             throw new RuntimeException("Expected UOM Not Found");
         }
 
@@ -166,13 +160,13 @@ public class RecipeReactiveBootstrap implements ApplicationListener<ContextRefre
         //get Categories
         Optional<Category> americanCategoryOptional = categoryRepository.findByDescription("American").blockOptional();
 
-        if (!americanCategoryOptional.isPresent()) {
+        if (americanCategoryOptional.isEmpty()) {
             throw new RuntimeException("Expected Category Not Found");
         }
 
         Optional<Category> mexicanCategoryOptional = categoryRepository.findByDescription("Mexican").blockOptional();
 
-        if (!mexicanCategoryOptional.isPresent()) {
+        if (mexicanCategoryOptional.isEmpty()) {
             throw new RuntimeException("Expected Category Not Found");
         }
 

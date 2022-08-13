@@ -43,7 +43,6 @@ class RecipeReactiveRepositoryIT {
         recipeReactiveBootstrap.onApplicationEvent(null);
     }
 
-
     @Test
     void testSaveRecipe() {
         Recipe recipe = new Recipe();
@@ -61,7 +60,7 @@ class RecipeReactiveRepositoryIT {
 
         assertNotNull(savedRecipe);
         assertEquals(savedRecipe.getDifficulty().toString(), Difficulty.EASY.toString());
-        assertEquals(TEST,savedRecipe.getDescription());
+        assertEquals(TEST, savedRecipe.getDescription());
         assertEquals(category.getId(), savedRecipe.getCategories().stream().findFirst().get().getId());
     }
 }

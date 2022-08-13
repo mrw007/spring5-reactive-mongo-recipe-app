@@ -6,12 +6,6 @@ import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
-
-/**
- * Created by Berkson Ximenes
- * Date: 26/07/2021
- * Time: 07:20
- */
 @Repository
 @Profile("reactive")
 public interface UnitOfMeasureReactiveRepository extends ReactiveMongoRepository<UnitOfMeasure, String> {
