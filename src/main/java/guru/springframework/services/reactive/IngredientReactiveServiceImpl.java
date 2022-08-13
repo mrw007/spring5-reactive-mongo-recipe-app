@@ -16,9 +16,6 @@ import reactor.core.publisher.Mono;
 
 import java.util.Optional;
 
-/**
- * Created by jt on 6/28/17.
- */
 @Slf4j
 @Service
 @Profile("reactive")
@@ -58,7 +55,7 @@ public class IngredientReactiveServiceImpl implements IngredientReactiveService 
     public Mono<IngredientCommand> saveIngredientCommand(IngredientCommand command) {
         Optional<Recipe> recipeOptional = recipeRepository.findById(command.getRecipeId()).blockOptional();
 
-        if (!recipeOptional.isPresent()) {
+        if (recipeOptional.isEmpty()) {
 
             //todo toss error if not found!
             log.error("Recipe not found for id: " + command.getRecipeId());
@@ -89,8 +86,6 @@ public class IngredientReactiveServiceImpl implements IngredientReactiveService 
                 recipe.addIngredient(ingredient);
             }
 
-            //recipeRepository.deleteById(recipe.getId()).block();
-            //log.debug("Filtrada: " + recipeRepository.findAll().filter(recipe1 -> recipe1.getId().equals(recipe.getId())).count().block());
             Recipe savedRecipe = recipeRepository.save(recipe).block();
 
             Optional<Ingredient> savedIngredientOptional = savedRecipe.getIngredients().stream()
@@ -98,7 +93,7 @@ public class IngredientReactiveServiceImpl implements IngredientReactiveService 
                     .findFirst();
 
             //check by description
-            if (!savedIngredientOptional.isPresent()) {
+            if (savedIngredientOptional.isEmpty()) {
                 //not totally safe... But best guess
                 savedIngredientOptional = savedRecipe.getIngredients().stream()
                         .filter(recipeIngredients -> recipeIngredients.getDescription().equals(command.getDescription()))

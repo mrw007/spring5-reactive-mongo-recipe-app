@@ -1,8 +1,6 @@
 package guru.springframework.controllers.reactive;
 
-import guru.springframework.controllers.IndexController;
 import guru.springframework.domain.Recipe;
-import guru.springframework.services.RecipeService;
 import guru.springframework.services.reactive.RecipeReactiveService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,9 +13,7 @@ import org.springframework.ui.Model;
 import reactor.core.publisher.Flux;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -25,9 +21,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-/**
- * Created by jt on 6/17/17.
- */
 public class IndexReactiveControllerTest {
 
     @Mock
