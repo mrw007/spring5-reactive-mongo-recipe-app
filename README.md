@@ -5,9 +5,8 @@
 
 # spring5-reactive-mongo-recipe-app
 
-[![CircleCI](https://dl.circleci.com/status-badge/img/gh/mrw007/spring5-mongo-recipe-app/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/mrw007/spring5-mongo-recipe-app/tree/master)
-[![codecov](https://codecov.io/gh/mrw007/spring5-mongo-recipe-app/branch/master/graph/badge.svg?token=EF9DZ19POX)](https://codecov.io/gh/mrw007/spring5-mongo-recipe-app)
-
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/mrw007/spring5-reactive-mongo-recipe-app/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/mrw007/spring5-reactive-mongo-recipe-app/tree/main)
+[![codecov](https://codecov.io/gh/mrw007/spring5-reactive-mongo-recipe-app/branch/main/graph/badge.svg?token=53JPMXHGYA)](https://codecov.io/gh/mrw007/spring5-reactive-mongo-recipe-app)
 Recipe Application Using MongoDB
 
 This repository is for an example application built in my Spring Framework 5 - Beginner to Guru
