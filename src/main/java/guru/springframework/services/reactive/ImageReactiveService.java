@@ -1,8 +1,9 @@
 package guru.springframework.services.reactive;
 
 import org.springframework.web.multipart.MultipartFile;
+import reactor.core.publisher.Mono;
 
 public interface ImageReactiveService {
 
-    void saveImageFile(String recipeId, MultipartFile file);
+    Mono<Void> saveImageFile(String recipeId, MultipartFile file);
 }

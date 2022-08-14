@@ -14,9 +14,6 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-/**
- * Created by jt on 6/13/17.
- */
 @Slf4j
 @Service
 public class RecipeServiceImpl implements RecipeService {
@@ -45,8 +42,8 @@ public class RecipeServiceImpl implements RecipeService {
 
         Optional<Recipe> recipeOptional = recipeRepository.findById(id);
 
-        if (!recipeOptional.isPresent()) {
-            throw new NotFoundException("Recipe Not Found. For ID value: " + id );
+        if (recipeOptional.isEmpty()) {
+            throw new NotFoundException("Recipe Not Found. For ID value: " + id);
         }
 
         return recipeOptional.get();
