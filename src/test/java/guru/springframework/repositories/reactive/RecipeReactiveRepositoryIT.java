@@ -1,6 +1,6 @@
 package guru.springframework.repositories.reactive;
 
-import guru.springframework.bootstrap.RecipeReactiveBootstrap;
+import guru.springframework.bootstrap.RecipeBootstrap;
 import guru.springframework.domain.Category;
 import guru.springframework.domain.Difficulty;
 import guru.springframework.domain.Ingredient;
@@ -9,10 +9,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
 
@@ -34,13 +32,13 @@ class RecipeReactiveRepositoryIT {
     @Autowired
     RecipeReactiveRepository recipeReactiveRepository;
 
-    RecipeReactiveBootstrap recipeReactiveBootstrap;
+    RecipeBootstrap recipeBootstrap;
 
     @BeforeEach
     void setUp() {
-        recipeReactiveBootstrap = new RecipeReactiveBootstrap(categoryReactiveRepository, recipeReactiveRepository,
+        recipeBootstrap = new RecipeBootstrap(categoryReactiveRepository, recipeReactiveRepository,
                 unitOfMeasureReactiveRepository);
-        recipeReactiveBootstrap.onApplicationEvent(null);
+        recipeBootstrap.onApplicationEvent(null);
     }
 
     @Test

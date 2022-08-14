@@ -1,6 +1,6 @@
 package guru.springframework.repositories.reactive;
 
-import guru.springframework.bootstrap.RecipeReactiveBootstrap;
+import guru.springframework.bootstrap.RecipeBootstrap;
 import guru.springframework.domain.UnitOfMeasure;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,13 +26,13 @@ class UnitOfMeasureReactiveRepositoryIT {
     @Autowired
     RecipeReactiveRepository recipeReactiveRepository;
 
-    RecipeReactiveBootstrap recipeReactiveBootstrap;
+    RecipeBootstrap recipeBootstrap;
 
     @BeforeEach
     void setUp() {
-        recipeReactiveBootstrap = new RecipeReactiveBootstrap(categoryReactiveRepository, recipeReactiveRepository,
+        recipeBootstrap = new RecipeBootstrap(categoryReactiveRepository, recipeReactiveRepository,
                 unitOfMeasureReactiveRepository);
-        recipeReactiveBootstrap.onApplicationEvent(null);
+        recipeBootstrap.onApplicationEvent(null);
     }
 
     @Test

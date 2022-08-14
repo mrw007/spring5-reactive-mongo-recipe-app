@@ -3,7 +3,6 @@ package guru.springframework.controllers;
 import guru.springframework.commands.RecipeCommand;
 import guru.springframework.services.ImageService;
 import guru.springframework.services.RecipeService;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -12,6 +11,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import reactor.core.publisher.Mono;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -23,12 +23,9 @@ public class ImageControllerTest {
 
     @Mock
     ImageService imageService;
-
     @Mock
     RecipeService recipeService;
-
     ImageController controller;
-
     MockMvc mockMvc;
 
     @BeforeEach
@@ -42,12 +39,12 @@ public class ImageControllerTest {
     }
 
     @Test
-    public void getImageForm() throws Exception {
+    public void testShowUploadForm() throws Exception {
         //given
         RecipeCommand command = new RecipeCommand();
         command.setId("1");
 
-        when(recipeService.findCommandById(anyString())).thenReturn(command);
+        when(recipeService.findCommandById(anyString())).thenReturn(Mono.just(command));
 
         //when
         mockMvc.perform(get("/recipe/1/image"))
@@ -63,6 +60,8 @@ public class ImageControllerTest {
         MockMultipartFile multipartFile =
                 new MockMultipartFile("imagefile", "testing.txt", "text/plain",
                         "Spring Framework Guru".getBytes());
+
+        when(imageService.saveImageFile(anyString(), any())).thenReturn(Mono.empty());
 
         mockMvc.perform(multipart("/recipe/1/image").file(multipartFile))
                 .andExpect(status().is3xxRedirection())
@@ -90,7 +89,7 @@ public class ImageControllerTest {
 
         command.setImage(bytesBoxed);
 
-        when(recipeService.findCommandById(anyString())).thenReturn(command);
+        when(recipeService.findCommandById(anyString())).thenReturn(Mono.just(command));
 
         //when
         MockHttpServletResponse response = mockMvc.perform(get("/recipe/1/recipeimage"))
