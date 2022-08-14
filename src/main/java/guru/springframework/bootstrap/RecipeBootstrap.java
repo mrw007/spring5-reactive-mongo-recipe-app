@@ -1,12 +1,11 @@
 package guru.springframework.bootstrap;
 
 import guru.springframework.domain.*;
-import guru.springframework.repositories.CategoryRepository;
-import guru.springframework.repositories.RecipeRepository;
-import guru.springframework.repositories.UnitOfMeasureRepository;
+import guru.springframework.repositories.reactive.CategoryReactiveRepository;
+import guru.springframework.repositories.reactive.RecipeReactiveRepository;
+import guru.springframework.repositories.reactive.UnitOfMeasureReactiveRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,93 +14,94 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-/**
- * Created by jt on 6/13/17.
- */
 @Slf4j
 @Component
-@Profile("notReactive")
 public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
-    private final CategoryRepository categoryRepository;
-    private final RecipeRepository recipeRepository;
-    private final UnitOfMeasureRepository unitOfMeasureRepository;
+    private final CategoryReactiveRepository categoryRepository;
+    private final RecipeReactiveRepository recipeRepository;
+    private final UnitOfMeasureReactiveRepository unitOfMeasureRepository;
 
-    public RecipeBootstrap(CategoryRepository categoryRepository,
-                           RecipeRepository recipeRepository, UnitOfMeasureRepository unitOfMeasureRepository) {
+
+    public RecipeBootstrap(CategoryReactiveRepository categoryRepository,
+                           RecipeReactiveRepository recipeRepository,
+                           UnitOfMeasureReactiveRepository unitOfMeasureRepository) {
         this.categoryRepository = categoryRepository;
         this.recipeRepository = recipeRepository;
         this.unitOfMeasureRepository = unitOfMeasureRepository;
     }
 
     @Override
-    @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
         //only bootstraps if the database is empty.
-
-        if (categoryRepository.count() == 0) {
+        if (categoryRepository.count().block() == 0) {
+            log.debug("loading cause is empty");
             loadCategories();
             loadUom();
         }
 
-        if (recipeRepository.count() == 0) {
-            recipeRepository.saveAll(getRecipes());
+        if (recipeRepository.count().block() == 0) {
+            recipeRepository.saveAll(getRecipes()).collect(Collectors.toSet()).block();
         }
 
         log.debug("Loading Bootstrap Data");
+        log.info("Categories: " + categoryRepository.count().block());
+        log.info("Recipes: " + recipeRepository.count().block());
+        log.info("Units of Measure: " + unitOfMeasureRepository.count().block());
     }
 
     private void loadCategories() {
         Category cat1 = new Category();
         cat1.setDescription("American");
-        categoryRepository.save(cat1);
+        categoryRepository.save(cat1).block();
 
         Category cat2 = new Category();
         cat2.setDescription("Italian");
-        categoryRepository.save(cat2);
+        categoryRepository.save(cat2).block();
 
         Category cat3 = new Category();
         cat3.setDescription("Mexican");
-        categoryRepository.save(cat3);
+        categoryRepository.save(cat3).block();
 
         Category cat4 = new Category();
         cat4.setDescription("Fast Food");
-        categoryRepository.save(cat4);
+        categoryRepository.save(cat4).block();
     }
 
     private void loadUom() {
         UnitOfMeasure uom1 = new UnitOfMeasure();
         uom1.setDescription("Teaspoon");
-        unitOfMeasureRepository.save(uom1);
+        unitOfMeasureRepository.save(uom1).block();
 
         UnitOfMeasure uom2 = new UnitOfMeasure();
         uom2.setDescription("Tablespoon");
-        unitOfMeasureRepository.save(uom2);
+        unitOfMeasureRepository.save(uom2).block();
 
         UnitOfMeasure uom3 = new UnitOfMeasure();
         uom3.setDescription("Cup");
-        unitOfMeasureRepository.save(uom3);
+        unitOfMeasureRepository.save(uom3).block();
 
         UnitOfMeasure uom4 = new UnitOfMeasure();
         uom4.setDescription("Pinch");
-        unitOfMeasureRepository.save(uom4);
+        unitOfMeasureRepository.save(uom4).block();
 
         UnitOfMeasure uom5 = new UnitOfMeasure();
         uom5.setDescription("Ounce");
-        unitOfMeasureRepository.save(uom5);
+        unitOfMeasureRepository.save(uom5).block();
 
         UnitOfMeasure uom6 = new UnitOfMeasure();
         uom6.setDescription("Each");
-        unitOfMeasureRepository.save(uom6);
+        unitOfMeasureRepository.save(uom6).block();
 
         UnitOfMeasure uom7 = new UnitOfMeasure();
         uom7.setDescription("Pint");
-        unitOfMeasureRepository.save(uom7);
+        unitOfMeasureRepository.save(uom7).block();
 
         UnitOfMeasure uom8 = new UnitOfMeasure();
         uom8.setDescription("Dash");
-        unitOfMeasureRepository.save(uom8);
+        unitOfMeasureRepository.save(uom8).block();
     }
 
     private List<Recipe> getRecipes() {
@@ -109,39 +109,41 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         List<Recipe> recipes = new ArrayList<>(2);
 
         //get UOMs
-        Optional<UnitOfMeasure> eachUomOptional = unitOfMeasureRepository.findByDescription("Each");
+        Optional<UnitOfMeasure> eachUomOptional = unitOfMeasureRepository.findByDescription("Each").blockOptional();
 
-        if (!eachUomOptional.isPresent()) {
+        if (eachUomOptional.isEmpty()) {
             throw new RuntimeException("Expected UOM Not Found");
         }
 
-        Optional<UnitOfMeasure> tableSpoonUomOptional = unitOfMeasureRepository.findByDescription("Tablespoon");
+        Optional<UnitOfMeasure> tableSpoonUomOptional = unitOfMeasureRepository
+                .findByDescription("Tablespoon").blockOptional();
 
-        if (!tableSpoonUomOptional.isPresent()) {
+        if (tableSpoonUomOptional.isEmpty()) {
             throw new RuntimeException("Expected UOM Not Found");
         }
 
-        Optional<UnitOfMeasure> teaSpoonUomOptional = unitOfMeasureRepository.findByDescription("Teaspoon");
+        Optional<UnitOfMeasure> teaSpoonUomOptional = unitOfMeasureRepository.findByDescription("Teaspoon")
+                .blockOptional();
 
-        if (!teaSpoonUomOptional.isPresent()) {
+        if (teaSpoonUomOptional.isEmpty()) {
             throw new RuntimeException("Expected UOM Not Found");
         }
 
-        Optional<UnitOfMeasure> dashUomOptional = unitOfMeasureRepository.findByDescription("Dash");
+        Optional<UnitOfMeasure> dashUomOptional = unitOfMeasureRepository.findByDescription("Dash").blockOptional();
 
-        if (!dashUomOptional.isPresent()) {
+        if (dashUomOptional.isEmpty()) {
             throw new RuntimeException("Expected UOM Not Found");
         }
 
-        Optional<UnitOfMeasure> pintUomOptional = unitOfMeasureRepository.findByDescription("Pint");
+        Optional<UnitOfMeasure> pintUomOptional = unitOfMeasureRepository.findByDescription("Pint").blockOptional();
 
-        if (!pintUomOptional.isPresent()) {
+        if (pintUomOptional.isEmpty()) {
             throw new RuntimeException("Expected UOM Not Found");
         }
 
-        Optional<UnitOfMeasure> cupsUomOptional = unitOfMeasureRepository.findByDescription("Cup");
+        Optional<UnitOfMeasure> cupsUomOptional = unitOfMeasureRepository.findByDescription("Cup").blockOptional();
 
-        if (!cupsUomOptional.isPresent()) {
+        if (cupsUomOptional.isEmpty()) {
             throw new RuntimeException("Expected UOM Not Found");
         }
 
@@ -154,15 +156,15 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         UnitOfMeasure cupsUom = cupsUomOptional.get();
 
         //get Categories
-        Optional<Category> americanCategoryOptional = categoryRepository.findByDescription("American");
+        Optional<Category> americanCategoryOptional = categoryRepository.findByDescription("American").blockOptional();
 
-        if (!americanCategoryOptional.isPresent()) {
+        if (americanCategoryOptional.isEmpty()) {
             throw new RuntimeException("Expected Category Not Found");
         }
 
-        Optional<Category> mexicanCategoryOptional = categoryRepository.findByDescription("Mexican");
+        Optional<Category> mexicanCategoryOptional = categoryRepository.findByDescription("Mexican").blockOptional();
 
-        if (!mexicanCategoryOptional.isPresent()) {
+        if (mexicanCategoryOptional.isEmpty()) {
             throw new RuntimeException("Expected Category Not Found");
         }
 
