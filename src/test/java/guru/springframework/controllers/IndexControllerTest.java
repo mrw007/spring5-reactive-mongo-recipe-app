@@ -2,35 +2,33 @@ package guru.springframework.controllers;
 
 import guru.springframework.domain.Recipe;
 import guru.springframework.services.RecipeService;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.ui.Model;
 import reactor.core.publisher.Flux;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+@Disabled
 public class IndexControllerTest {
     @Mock
     RecipeService recipeService;
     @Mock
     Model model;
+    @InjectMocks
     IndexController controller;
     List<Recipe> recipes;
+    WebTestClient webTestClient;
 
     @BeforeEach
     void setUp() {
@@ -44,18 +42,18 @@ public class IndexControllerTest {
 
         MockitoAnnotations.openMocks(this);
 
-        controller = new IndexController(recipeService);
+        webTestClient = WebTestClient.bindToController(controller).build();
+
     }
 
     @Test
-    public void testMockMVC() throws Exception {
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+    public void testMockMVC() {
+        when(recipeService.getRecipes()).thenReturn(Flux.empty());
 
-        when(recipeService.getRecipes()).thenReturn(Flux.fromIterable(recipes));
-
-        mockMvc.perform(get("/"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("index"));
+        webTestClient.get().uri("/")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody();
     }
 
     @Test
